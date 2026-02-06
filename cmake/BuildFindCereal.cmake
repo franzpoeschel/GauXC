@@ -1,5 +1,10 @@
-find_package( cereal QUIET )
-if( NOT cereal_FOUND )
+# Check if offline build is requested
+if(GAUXC_OFFLINE_BUILD)
+  find_package( cereal REQUIRED )
+  message(STATUS "GAUXC_OFFLINE_BUILD enabled - using system-installed cereal")
+else()
+  find_package( cereal QUIET )
+  if( NOT cereal_FOUND )
 
   include( gauxc-dep-versions )
 
@@ -23,6 +28,7 @@ if( NOT cereal_FOUND )
     )
   endif()
 
+  endif()
 else()
 
   target_compile_definitions( cereal INTERFACE

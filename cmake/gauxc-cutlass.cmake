@@ -7,7 +7,13 @@ endforeach()
 
 include( gauxc-dep-versions )
 
-message( STATUS "Building Local CUTLASS Installation" )
+# Check if offline build is requested
+if(GAUXC_OFFLINE_BUILD)
+  message(STATUS "GAUXC_OFFLINE_BUILD enabled - skipping remote download of CUTLASS")
+  message(FATAL_ERROR "CUTLASS is required but GAUXC_OFFLINE_BUILD is enabled. "
+                      "Please install CUTLASS system-wide or disable GAUXC_OFFLINE_BUILD.")
+else()
+  message( STATUS "Building Local CUTLASS Installation" )
 message( STATUS "CUTLASS REPO = ${GAUXC_CUTLASS_REPOSITORY}" )
 message( STATUS "CUTLASS REV  = ${GAUXC_CUTLASS_REVISION}"   )
 
@@ -30,4 +36,5 @@ set_target_properties( gauxc_cutlass PROPERTIES
     "${cutlass_SOURCE_DIR}/include;${cutlass_SOURCE_DIR}/tools/util/include"
 )
 
-set(GAUXC_HAS_CUTLASS TRUE CACHE BOOL "GauXC has CUTLASS" FORCE) 
+  set(GAUXC_HAS_CUTLASS TRUE CACHE BOOL "GauXC has CUTLASS" FORCE)
+endif()
