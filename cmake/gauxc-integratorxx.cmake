@@ -1,5 +1,10 @@
-find_package( IntegratorXX QUIET )
-if( NOT ${IntegratorXX_FOUND} )
+# Check if offline build is requested
+if(GAUXC_OFFLINE_BUILD)
+  find_package( IntegratorXX REQUIRED )
+  message(STATUS "GAUXC_OFFLINE_BUILD enabled - using system-installed IntegratorXX")
+else()
+  find_package( IntegratorXX QUIET )
+  if( NOT ${IntegratorXX_FOUND} )
 
   include( gauxc-dep-versions )
 
@@ -16,6 +21,7 @@ if( NOT ${IntegratorXX_FOUND} )
 
   FetchContent_MakeAvailable( integratorxx )
 
+  endif()
 endif()
 
 

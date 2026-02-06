@@ -1,5 +1,10 @@
-find_package( Eigen3 CONFIG HINTS ${EIGEN3_ROOT_DIR} )
-if( NOT Eigen3_FOUND )
+# Check if offline build is requested
+if(GAUXC_OFFLINE_BUILD)
+  find_package( Eigen3 CONFIG HINTS ${EIGEN3_ROOT_DIR} REQUIRED )
+  message(STATUS "GAUXC_OFFLINE_BUILD enabled - using system-installed Eigen3")
+else()
+  find_package( Eigen3 CONFIG HINTS ${EIGEN3_ROOT_DIR} )
+  if( NOT Eigen3_FOUND )
   
   message( STATUS "Could Not Find Eigen3... Building" )
   message( STATUS "EIGEN3 REPO = https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz" )
@@ -14,6 +19,8 @@ if( NOT Eigen3_FOUND )
   if( NOT eigen3_POPULATED )
     FetchContent_Populate( eigen3 )
   endif()
+  
+endif()
 
   #message( FATAL_ERROR "Eigen3 Pull Not Yet Configured" )
   add_library( Eigen3::Eigen INTERFACE IMPORTED )

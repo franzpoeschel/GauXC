@@ -1,8 +1,16 @@
 if( GAUXC_ENABLE_GAU2GRID )
   if( NOT TARGET gau2grid::gg )
   
-    # First try to find the package if target doesn't exist
-    find_package( gau2grid CONFIG QUIET ) 
+    # Check if offline build is requested
+    if(GAUXC_OFFLINE_BUILD)
+      # First try to find the package if target doesn't exist
+      find_package( gau2grid CONFIG REQUIRED )
+      message(STATUS "GAUXC_OFFLINE_BUILD enabled - using system-installed gau2grid")
+    else()
+      # First try to find the package if target doesn't exist
+      find_package( gau2grid CONFIG QUIET ) 
+    
+    endif() # GAUXC_OFFLINE_BUILD
     
     if( NOT gau2grid_FOUND )
     

@@ -40,6 +40,8 @@ option( GAUXC_ENABLE_ONEDFT     "Enable ONEDFT Functional"    ON )
 option( GAUXC_USE_FAST_RSQRT    "Enable Fast RSQRT"           OFF )
 option( GAUXC_BLAS_PREFER_ILP64 "Prefer ILP64 for host BLAS"  OFF )
 option( GAUXC_LINK_CUDA_STATIC  "Link GauXC with static CUDA libs"  OFF )
+option( GAUXC_OFFLINE_BUILD     "Disable remote downloads and use only system-installed dependencies" OFF )
+option( GAUXC_LINALG_MODULES_DIR "Path to locally installed linalg-cmake-modules for offline builds" "" )
 
 include(CMakeDependentOption)
 cmake_dependent_option( GAUXC_ENABLE_MAGMA    
