@@ -15,6 +15,7 @@
 
 #include "c_runtime_environment.hpp"
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::C {
 extern "C" {
@@ -23,6 +24,7 @@ GauXCRuntimeEnvironment gauxc_runtime_environment_new(
   GauXCStatus* status
   GAUXC_MPI_CODE(, MPI_Comm comm) 
 ) {
+  GAUXC_API_LOG("gauxc_runtime_environment_new()");
   detail::gauxc_status_init(status);
   GauXCRuntimeEnvironment env{};
   env.ptr = nullptr;
@@ -40,6 +42,7 @@ GauXCRuntimeEnvironment gauxc_runtime_environment_new(
 }
 
 void gauxc_runtime_environment_delete(GauXCStatus* status, GauXCRuntimeEnvironment* env) {
+  GAUXC_API_LOG("gauxc_runtime_environment_delete()");
   detail::gauxc_status_init(status);
   if (env == nullptr) return;
   if (env->ptr != nullptr) {
@@ -55,6 +58,7 @@ void gauxc_runtime_environment_delete(GauXCStatus* status, GauXCRuntimeEnvironme
 }
 
 int gauxc_runtime_environment_comm_rank(GauXCStatus* status, const GauXCRuntimeEnvironment env) {
+  GAUXC_API_LOG("gauxc_runtime_environment_comm_rank()");
   detail::gauxc_status_init(status);
 #ifdef GAUXC_HAS_DEVICE
   if ((env.device_ptr ? env.device_ptr : env.ptr) == nullptr || env.hdr.type != GauXC_Type_RuntimeEnvironment) {
@@ -68,6 +72,7 @@ int gauxc_runtime_environment_comm_rank(GauXCStatus* status, const GauXCRuntimeE
 }
 
 int gauxc_runtime_environment_comm_size(GauXCStatus* status, const GauXCRuntimeEnvironment env) {
+  GAUXC_API_LOG("gauxc_runtime_environment_comm_size()");
   detail::gauxc_status_init(status);
 #ifdef GAUXC_HAS_DEVICE
   if ((env.device_ptr ? env.device_ptr : env.ptr) == nullptr || env.hdr.type != GauXC_Type_RuntimeEnvironment) {
@@ -86,6 +91,7 @@ GauXCRuntimeEnvironment gauxc_device_runtime_environment_new(
   GAUXC_MPI_CODE(MPI_Comm comm,)
   double fill_fraction
 ) {
+  GAUXC_API_LOG("gauxc_device_runtime_environment_new(fill_fraction=%f)", fill_fraction);
   detail::gauxc_status_init(status);
   GauXCRuntimeEnvironment env{};
   env.hdr = GauXCHeader{GauXC_Type_RuntimeEnvironment};
@@ -108,6 +114,7 @@ GauXCRuntimeEnvironment gauxc_device_runtime_environment_new_mem(
   void* mem,
   size_t mem_sz
 ) {
+  GAUXC_API_LOG("gauxc_device_runtime_environment_new_mem(mem_sz=%zu)", mem_sz);
   detail::gauxc_status_init(status);
   GauXCRuntimeEnvironment env{};
   env.hdr = GauXCHeader{GauXC_Type_RuntimeEnvironment};

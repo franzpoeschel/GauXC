@@ -26,6 +26,7 @@
 #include "c_functional.hpp"
 #include "c_xc_integrator.hpp"
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::detail {
 
@@ -75,6 +76,7 @@ void gauxc_integrator_delete(
   GauXCStatus* status,
   GauXCIntegrator* integrator
 ) {
+  GAUXC_API_LOG("gauxc_integrator_delete()");
   detail::gauxc_status_init(status);
   if (integrator == nullptr) return;
   if (integrator->ptr != nullptr) {
@@ -93,6 +95,12 @@ GauXCIntegrator gauxc_integrator_new(
   const char* local_work_kernel_name,
   const char* reduction_kernel_name
 ) {
+  GAUXC_API_LOG("gauxc_integrator_new(execution_space=%s, input_type=\"%s\", integrator=\"%s\", local_work=\"%s\", reduction=\"%s\")",
+    detail::execution_space_name(execution_space),
+    integrator_input_type ? integrator_input_type : "NULL",
+    integrator_kernel_name ? integrator_kernel_name : "NULL",
+    local_work_kernel_name ? local_work_kernel_name : "NULL",
+    reduction_kernel_name ? reduction_kernel_name : "NULL");
   detail::gauxc_status_init(status);
   GauXCIntegrator integrator{};
   integrator.hdr = GauXCHeader{GauXC_Type_Integrator};
@@ -155,6 +163,7 @@ void gauxc_integrator_integrate_den(
   int64_t ldp,
   double* den
 ) {
+  GAUXC_API_LOG("gauxc_integrator_integrate_den(m=%ld, n=%ld, ldp=%ld)", m, n, ldp);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -187,6 +196,7 @@ void gauxc_integrator_eval_exc_rks(
   int64_t ldp,
   double* exc
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_rks(m=%ld, n=%ld, ldp=%ld)", m, n, ldp);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -222,6 +232,7 @@ void gauxc_integrator_eval_exc_uks(
   int64_t ldp_z,
   double* exc
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_uks(m=%ld, n=%ld, ldp_s=%ld, ldp_z=%ld)", m, n, ldp_s, ldp_z);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -266,6 +277,7 @@ void gauxc_integrator_eval_exc_gks(
   int64_t ldp_x,
   double* exc
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_gks(m=%ld, n=%ld, ldp_s=%ld, ldp_z=%ld, ldp_y=%ld, ldp_x=%ld)", m, n, ldp_s, ldp_z, ldp_y, ldp_x);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -316,6 +328,7 @@ void gauxc_integrator_eval_exc_vxc_rks(
   double* vxc_matrix,
   int64_t vxc_ld
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_vxc_rks(m=%ld, n=%ld, ldp=%ld, vxc_ld=%ld)", m, n, ldp, vxc_ld);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -360,6 +373,7 @@ void gauxc_integrator_eval_exc_vxc_uks(
   double* vxc_matrix_z,
   int64_t vxc_ld_z
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_vxc_uks(m=%ld, n=%ld, ldp_s=%ld, ldp_z=%ld, vxc_ld_s=%ld, vxc_ld_z=%ld)", m, n, ldp_s, ldp_z, vxc_ld_s, vxc_ld_z);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -415,6 +429,7 @@ void gauxc_integrator_eval_exc_vxc_onedft_uks(
   double* vxc_matrix_z,
   int64_t vxc_ld_z
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_vxc_onedft_uks(m=%ld, n=%ld, ldp_s=%ld, ldp_z=%ld, model=\"%s\", vxc_ld_s=%ld, vxc_ld_z=%ld)", m, n, ldp_s, ldp_z, model ? model : "NULL", vxc_ld_s, vxc_ld_z);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -484,6 +499,7 @@ void gauxc_integrator_eval_exc_vxc_gks(
   double* vxc_matrix_x,
   int64_t vxc_ld_x
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_vxc_gks(m=%ld, n=%ld, ldp_s/z/y/x=%ld/%ld/%ld/%ld, vxc_ld_s/z/y/x=%ld/%ld/%ld/%ld)", m, n, ldp_s, ldp_z, ldp_y, ldp_x, vxc_ld_s, vxc_ld_z, vxc_ld_y, vxc_ld_x);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -552,6 +568,7 @@ void gauxc_integrator_eval_exc_grad_rks(
   int64_t ldp,
   double* exc_grad
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_grad_rks(m=%ld, n=%ld, ldp=%ld)", m, n, ldp);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -587,6 +604,7 @@ void gauxc_integrator_eval_exc_grad_uks(
   int64_t ldp_z,
   double* exc_grad
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_grad_uks(m=%ld, n=%ld, ldp_s=%ld, ldp_z=%ld)", m, n, ldp_s, ldp_z);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -628,6 +646,7 @@ void gauxc_integrator_eval_exc_grad_onedft_uks(
   const char* model,
   double* exc_grad
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exc_grad_onedft_uks(m=%ld, n=%ld, ldp_s=%ld, ldp_z=%ld, model=\"%s\")", m, n, ldp_s, ldp_z, model ? model : "NULL");
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -673,6 +692,7 @@ void gauxc_integrator_eval_exx_rks(
   double* K,
   int64_t ldk
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_exx_rks(m=%ld, n=%ld, ldp=%ld, ldk=%ld)", m, n, ldp, ldk);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -709,6 +729,7 @@ void gauxc_integrator_eval_fxc_contraction_rks(
   double* fxc,
   int64_t ldfxc
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_fxc_contraction_rks(m=%ld, n=%ld, ldp=%ld, ldtp=%ld, ldfxc=%ld)", m, n, ldp, ldtp, ldfxc);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");
@@ -756,6 +777,7 @@ void gauxc_integrator_eval_fxc_contraction_uks(
   double* fxc_z,
   int64_t ldfxc_z
 ) {
+  GAUXC_API_LOG("gauxc_integrator_eval_fxc_contraction_uks(m=%ld, n=%ld, ldp_s/z=%ld/%ld, ldtp_s/z=%ld/%ld, ldfxc_s/z=%ld/%ld)", m, n, ldp_s, ldp_z, ldtp_s, ldtp_z, ldfxc_s, ldfxc_z);
   detail::gauxc_status_init(status);
   if (integrator.ptr == nullptr || integrator.hdr.type != GauXC_Type_Integrator) {
     detail::gauxc_status_handle(status, 1, "Invalid Integrator handle");

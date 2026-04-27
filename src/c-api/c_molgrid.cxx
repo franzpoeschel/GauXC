@@ -19,6 +19,7 @@
 #include "c_molecule.hpp"
 #include "c_molgrid.hpp"
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::C {
 extern "C" {
@@ -31,6 +32,9 @@ GauXCMolGrid gauxc_molgrid_new_default(
   const enum GauXC_RadialQuad radial_quad,
   const enum GauXC_AtomicGridSizeDefault grid_size
 ) {
+  GAUXC_API_LOG("gauxc_molgrid_new_default(pruning=%s, batchsize=%ld, radial=%s, grid=%s)",
+    detail::pruning_scheme_name(pruning_scheme), (long)batchsize,
+    detail::radial_quad_name(radial_quad), detail::atomic_grid_size_name(grid_size));
   detail::gauxc_status_init(status);
   GauXCMolGrid mg{};
   mg.hdr = GauXCHeader{GauXC_Type_MolGrid};
@@ -56,6 +60,7 @@ GauXCMolGrid gauxc_molgrid_new_default(
 }
 
 void gauxc_molgrid_delete(GauXCStatus* status, GauXCMolGrid* mg) {
+  GAUXC_API_LOG("gauxc_molgrid_delete()");
   detail::gauxc_status_init(status);
   if (mg == nullptr) return;
   if (mg->ptr != nullptr)
