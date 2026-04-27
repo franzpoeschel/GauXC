@@ -27,32 +27,10 @@ namespace {
 void log_shell_info(const GauXCShell* shells, size_t nshells, bool normalize) {
     if (!api_logging_enabled()) return;
 
-    int nset = 1;
-    int shell_in_set = 1;
-    bool prev_pure = shells[0].pure;
-
-    for (size_t i = 1; i < nshells; ++i) {
-        if (shells[i].pure != prev_pure) {
-            nset++;
-            shell_in_set = 1;
-            prev_pure = shells[i].pure;
-        }
-    }
-
-    int ncart = 0, nspherical = 0;
-    for (size_t i = 0; i < nshells; ++i) {
-        int l = shells[i].l;
-        ncart += (l + 1) * (l + 2) / 2;
-        nspherical += 2 * l + 1;
-    }
-
     fprintf(stderr, "[GAUXC API] gauxc_basisset_new_from_shells()");
     fprintf(stderr, "[GAUXC_API] Creating BasisSet from %zu shells\n", nshells);
-    fprintf(stderr, "[GAUXC_API]   Number of orbital shell sets: %d\n", nset);
     fprintf(stderr, "[GAUXC_API]   Number of orbital shells: %zu\n", nshells);
     fprintf(stderr, "[GAUXC_API]   Number of primitive Cartesian functions: %d\n", (int)nshells);
-    fprintf(stderr, "[GAUXC_API]   Number of Cartesian basis functions: %d\n", ncart);
-    fprintf(stderr, "[GAUXC_API]   Number of spherical basis functions: %d\n", nspherical);
     fprintf(stderr, "[GAUXC_API]   Norm type: %s\n\n", normalize ? "L2" : "None");
 
     fprintf(stderr, "[GAUXC_API] Shell data:\n");
@@ -61,18 +39,17 @@ void log_shell_info(const GauXCShell* shells, size_t nshells, bool normalize) {
     for (size_t i = 0; i < nshells; ++i) {
         for (int p = 0; p < shells[i].nprim; ++p) {
             if (p == 0) {
-                fprintf(stderr, "[GAUXC_API] %6d %6d %4d  %2d/%2d  (%10.6f,%10.6f,%10.6f)  %10.2e  %14.6f  %14.6f\n",
-                    shell_in_set, shells[i].nprim, shells[i].l,
+                fprintf(stderr, "[GAUXC_API] %6zu %6d %4d  %2d/%2d  (%10.6f,%10.6f,%10.6f)  %10.2e  %14.6f  %14.6f\n",
+                    i, shells[i].nprim, shells[i].l,
                     shells[i].pure ? 1 : 0, shells[i].pure ? 0 : 1,
                     shells[i].origin[0], shells[i].origin[1], shells[i].origin[2],
                     shells[i].shell_tolerance,
                     shells[i].exponents[p], shells[i].coefficients[p]);
             } else {
-                fprintf(stderr, "[GAUXC_API]                                                                    %14.6f  %14.6f\n",
+                fprintf(stderr, "[GAUXC_API]                                                                            %14.6f  %14.6f\n",
                     shells[i].exponents[p], shells[i].coefficients[p]);
             }
         }
-        shell_in_set++;
     }
     fprintf(stderr, "\n");
 }
