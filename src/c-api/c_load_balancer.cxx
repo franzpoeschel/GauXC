@@ -19,6 +19,7 @@
 #include "c_runtime_environment.hpp"
 #include "c_load_balancer.hpp"
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::C {
 extern "C" {
@@ -27,6 +28,7 @@ void gauxc_load_balancer_delete(
   GauXCStatus* status,
   GauXCLoadBalancer* lb
 ) {
+  GAUXC_API_LOG("gauxc_load_balancer_delete()");
   detail::gauxc_status_init(status);
   if(lb == nullptr) return;
   if(lb->ptr != nullptr) {
@@ -40,6 +42,8 @@ GauXCLoadBalancerFactory gauxc_load_balancer_factory_new(
   enum GauXC_ExecutionSpace ex,
   const char* kernel_name
 ) {
+  GAUXC_API_LOG("gauxc_load_balancer_factory_new(execution_space=%s, kernel=\"%s\")",
+    detail::execution_space_name(ex), kernel_name ? kernel_name : "NULL");
   detail::gauxc_status_init(status);
   GauXCLoadBalancerFactory lbf{};
   lbf.hdr = GauXCHeader{GauXC_Type_LoadBalancerFactory};
@@ -64,6 +68,7 @@ void gauxc_load_balancer_factory_delete(
   GauXCStatus* status,
   GauXCLoadBalancerFactory* lbf
 ) {
+  GAUXC_API_LOG("gauxc_load_balancer_factory_delete()");
   detail::gauxc_status_init(status);
   if(lbf == nullptr) return;
   if(lbf->ptr != nullptr)
@@ -79,6 +84,7 @@ GauXCLoadBalancer gauxc_load_balancer_factory_get_instance(
   const GauXCMolGrid mg,
   const GauXCBasisSet bs
 ) {
+  GAUXC_API_LOG("gauxc_load_balancer_factory_get_instance()");
   detail::gauxc_status_init(status);
   GauXCLoadBalancer lb{};
   lb.hdr = GauXCHeader{GauXC_Type_LoadBalancer};

@@ -18,6 +18,7 @@
 #include "c_molecular_weights.hpp"
 #include "c_load_balancer.hpp"
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::C {
 extern "C" {
@@ -28,6 +29,8 @@ GauXCMolecularWeightsFactory gauxc_molecular_weights_factory_new(
   const char* kernel_name,
   const GauXCMolecularWeightsSettings settings
 ) {
+  GAUXC_API_LOG("gauxc_molecular_weights_factory_new(execution_space=%s, kernel=\"%s\")",
+    detail::execution_space_name(ex), kernel_name ? kernel_name : "NULL");
   detail::gauxc_status_init(status);
   GauXCMolecularWeightsFactory mwf{};
   mwf.hdr = GauXCHeader{GauXC_Type_MolecularWeightsFactory};
@@ -53,6 +56,7 @@ GauXCMolecularWeights gauxc_molecular_weights_factory_get_instance(
   GauXCStatus* status,
   const GauXCMolecularWeightsFactory mwf
 ) {
+  GAUXC_API_LOG("gauxc_molecular_weights_factory_get_instance()");
   detail::gauxc_status_init(status);
   GauXCMolecularWeights mw{};
   mw.hdr = GauXCHeader{GauXC_Type_MolecularWeights};
@@ -76,6 +80,7 @@ void gauxc_molecular_weights_modify_weights(
   const GauXCMolecularWeights mw,
   const GauXCLoadBalancer lb
 ) {
+  GAUXC_API_LOG("gauxc_molecular_weights_modify_weights()");
   detail::gauxc_status_init(status);
   if (mw.ptr == nullptr || mw.hdr.type != GauXC_Type_MolecularWeights) {
     detail::gauxc_status_handle(status, 1, "Invalid MolecularWeights handle");
@@ -99,6 +104,7 @@ void gauxc_molecular_weights_delete(
   GauXCStatus* status,
   GauXCMolecularWeights* mw
 ) {
+  GAUXC_API_LOG("gauxc_molecular_weights_delete()");
   detail::gauxc_status_init(status);
   if(mw == nullptr) return;
   if(mw->ptr != nullptr) {
@@ -112,6 +118,7 @@ void gauxc_molecular_weights_factory_delete(
   GauXCStatus* status,
   GauXCMolecularWeightsFactory* mwf
 ) {
+  GAUXC_API_LOG("gauxc_molecular_weights_factory_delete()");
   detail::gauxc_status_init(status);
   if(mwf == nullptr) return;
   if(mwf->ptr != nullptr)

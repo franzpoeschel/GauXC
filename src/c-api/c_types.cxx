@@ -22,11 +22,13 @@
 #include <gauxc/c/xc_integrator.h>
 
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::C {
 extern "C" {
 
 void gauxc_object_delete(GauXCStatus* status, void** obj) {
+   GAUXC_API_LOG("gauxc_object_delete()");
    detail::gauxc_status_init(status);
    if(obj == nullptr || *obj == nullptr) return;
 
@@ -99,6 +101,7 @@ void gauxc_objects_delete(
   void** ptrs,
   size_t nptrs
 ) {
+   GAUXC_API_LOG("gauxc_objects_delete(nptrs=%zu)", nptrs);
    detail::gauxc_status_init(status);
    for(void** ptr = ptrs; ptr < ptrs + nptrs; ++ptr) {
       if(*ptr != nullptr) {

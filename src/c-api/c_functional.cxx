@@ -18,6 +18,7 @@
 
 #include "c_functional.hpp"
 #include "c_status.hpp"
+#include "api_logging.hpp"
 
 namespace GauXC::detail {
 /**
@@ -56,6 +57,8 @@ GauXCFunctional gauxc_functional_from_string(
   const char* functional_spec,
   bool polarized
 ) {
+  GAUXC_API_LOG("gauxc_functional_from_string(spec=\"%s\", spin=%s)",
+    functional_spec ? functional_spec : "NULL", polarized ? "Polarized" : "Unpolarized");
   detail::gauxc_status_init(status);
   GauXCFunctional functional{};
   functional.hdr = GauXCHeader{GauXC_Type_Functional};
@@ -96,6 +99,9 @@ GauXCFunctional gauxc_functional_from_enum(
   enum GauXC_Functional functional_enum,
   bool polarized
 ) {
+  GAUXC_API_LOG("gauxc_functional_from_enum(func=%s, spin=%s)",
+    detail::functional_enum_name(static_cast<int>(functional_enum)),
+    polarized ? "Polarized" : "Unpolarized");
   detail::gauxc_status_init(status);
   GauXCFunctional functional{};
   functional.hdr = GauXCHeader{GauXC_Type_Functional};
@@ -117,6 +123,7 @@ void gauxc_functional_delete(
   GauXCStatus* status,
   GauXCFunctional* functional
 ) {
+  GAUXC_API_LOG("gauxc_functional_delete()");
   detail::gauxc_status_init(status);
   if(functional == nullptr) return;
   if(functional->ptr != nullptr)
