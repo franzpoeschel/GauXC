@@ -373,8 +373,9 @@ pre_onedft_local_work_( const basis_type& basis, const value_type* Ps, int64_t l
     }
     else if( is_gga ) lwd->eval_collocation_gradient( &device_data );
     else                     lwd->eval_collocation( &device_data );
-      
-    const double xmat_fac = is_rks ? 2.0 : 1.0;
+
+    // CP2K density matrix already includes occupation factor (maxocc=2 for RKS)
+    const double xmat_fac = 1.0;
     const bool need_xmat_grad = is_mgga;
 
     // Evaluate X matrix and V vars

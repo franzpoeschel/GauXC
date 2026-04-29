@@ -385,11 +385,22 @@ void ReferenceReplicatedXCHostIntegrator<ValueType>::
       lwd->eval_collocation( npts, nshells, nbe, points, basis, shell_list,
         basis_eval );
 
-     
     // Evaluate X matrix (fac * P * B) -> store in Z
-    const auto xmat_fac = is_rks ? 2.0 : 1.0; // TODO Fix for spinor RKS input
-    lwd->eval_xmat( mgga_dim_scal * npts, nbf, nbe, submat_map, xmat_fac, Ps, ldps, basis_eval, nbe,
-      zmat, nbe, nbe_scr );
+    // CP2K density matrix already includes occupation factor (maxocc=2 for RKS)
+    const auto xmat_fac = 1.0;
+    lwd->eval_xmat(
+        mgga_dim_scal * npts,
+        nbf,
+        nbe,
+        submat_map,
+        xmat_fac,
+        Ps,
+        ldps,
+        basis_eval,
+        nbe,
+        zmat,
+        nbe,
+        nbe_scr);
     // X matrix for Pz
     if(not is_rks) {
       lwd->eval_xmat( mgga_dim_scal * npts, nbf, nbe, submat_map, 1.0, Pz, ldpz, basis_eval, nbe,
