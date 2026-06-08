@@ -18,6 +18,10 @@
 #include "c_status.hpp"
 #include "hdf5_util.hpp"
 
+#ifdef GAUXC_HAS_HDF5
+#include "c-api/api_logging.hpp"
+#endif
+
 namespace GauXC::C {
 extern "C" {
 
@@ -34,6 +38,8 @@ void gauxc_molecule_write_hdf5_record(
   const char* fname,
   const char* dset
 ) {
+  GAUXC_API_LOG("gauxc_molecule_write_hdf5_record(file=\"%s\", dataset=\"%s\")",
+    fname ? fname : "NULL", dset ? dset : "NULL");
   detail::gauxc_status_init(status);
   if (mol.ptr == nullptr || mol.hdr.type != GauXC_Type_Molecule) {
     detail::gauxc_status_handle(status, 1, "Invalid Molecule handle");
@@ -67,6 +73,8 @@ void gauxc_basisset_write_hdf5_record(
   const char* fname,
   const char* dset
 ) {
+  GAUXC_API_LOG("gauxc_basisset_write_hdf5_record(file=\"%s\", dataset=\"%s\")",
+    fname ? fname : "NULL", dset ? dset : "NULL");
   detail::gauxc_status_init(status);
   if (basis.ptr == nullptr || basis.hdr.type != GauXC_Type_BasisSet) {
     detail::gauxc_status_handle(status, 1, "Invalid BasisSet handle");
