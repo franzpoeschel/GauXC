@@ -34,19 +34,19 @@ void log_shell_info(const GauXCShell* shells, size_t nshells, bool normalize) {
     fprintf(stderr, "[GAUXC_API]   Norm type: %s\n\n", normalize ? "L2" : "None");
 
     fprintf(stderr, "[GAUXC_API] Shell data:\n");
-    fprintf(stderr, "[GAUXC_API]  Shell     n   l   p/c                 Origin (x, y, z)                Tol        Exponent    Coefficient\n");
+    fprintf(stderr, "[GAUXC_API]  Shell      n    l   p/c   Origin (x, y, z)                      Tol         Exponent       Coefficient\n");
 
     for (size_t i = 0; i < nshells; ++i) {
         for (int p = 0; p < shells[i].nprim; ++p) {
             if (p == 0) {
-                fprintf(stderr, "[GAUXC_API] %6zu %6d %4d  %2d/%2d  (%10.6f,%10.6f,%10.6f)  %10.2e  %14.6f  %14.6f\n",
+                fprintf(stderr, "[GAUXC_API] %6zu %6d %4d  %2d/%2d  (%10.6f,%10.6f,%10.6f)  %10.2e  %14.10f  %14.10f\n",
                     i, shells[i].nprim, shells[i].l,
                     shells[i].pure ? 1 : 0, shells[i].pure ? 0 : 1,
                     shells[i].origin[0], shells[i].origin[1], shells[i].origin[2],
                     shells[i].shell_tolerance,
                     shells[i].exponents[p], shells[i].coefficients[p]);
             } else {
-                fprintf(stderr, "[GAUXC_API]                                                                            %14.6f  %14.6f\n",
+                fprintf(stderr, "[GAUXC_API]                                                                            %14.10f  %14.10f\n",
                     shells[i].exponents[p], shells[i].coefficients[p]);
             }
         }
